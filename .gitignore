@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/rosterBuilder/.vs/rosterBuilder/FileContentIndex/d87caae5-8817-4637-a676-e64dce5afdee.vsidx
+/rosterBuilder/.vs/rosterBuilder/FileContentIndex/read.lock
+/rosterBuilder/.vs/slnx.sqlite
+/rosterBuilder/.vscode/extensions.json

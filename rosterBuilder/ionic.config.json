@@ -1,0 +1,7 @@
+{
+  "name": "rosterBuilder",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
