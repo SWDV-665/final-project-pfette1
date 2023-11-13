@@ -6,3 +6,6 @@
 /rosterBuilder/.vs/rosterBuilder/FileContentIndex/read.lock
 /rosterBuilder/.vs/slnx.sqlite
 /rosterBuilder/.vscode/extensions.json
+*.vsidx
+*.suo
+/rosterBuilder/.vs/VSWorkspaceState.json

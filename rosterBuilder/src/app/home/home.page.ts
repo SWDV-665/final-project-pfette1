@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { ToastController } from '@ionic/angular';
+import { InputDialogService } from '../../providers/input-dialog.service';
+import { RosterBuilderService } from '../../providers/roster-builder.service';
 
 @Component({
   selector: 'app-home',
@@ -10,54 +12,14 @@ export class HomePage {
 
   title = "Roster Builder";
 
-  players = [
-    {
-      name: "Jackson",
-      contactName: "Patrick",
-      phoneNumber: "5025553570"
-    },
-    {
-      name: "Sammy",
-      contactName: "John",
-      phoneNumber: "5029868959"
-    },
-    {
-      name: "Levi",
-      contactName: "Eric",
-      phoneNumber: "5029868794"
-    }
-  ]
+  constructor(
+    private toastController: ToastController,
+    public rosterBuilderService: RosterBuilderService,
+    public inputDialogService: InputDialogService) { }
 
-  public alertButtons = [
-    {
-      text: 'Cancel',
-      handler: (data: any) => {
-      }
-    },
-    {
-      text: 'Save',
-      handler: (player: any) => {
-        this.players.push(player);
-      }
-    }
-  ];
-
-  public alertInputs = [
-    {
-      name: 'name',
-      placeholder: 'Name'
-    },
-    {
-      contactName: 'contactName',
-      placeholder: 'Contact Name'
-    },
-    {
-      name: 'phoneNumber',
-      placeholder: 'Phone Number'
-    }
-  ];
-
-  constructor(private toastController: ToastController) {}
+  loadPlayers() {
+   return this.rosterBuilderService.getPlayers();
+  }
 
   async removePlayer(player: any, index: number) {
     const toast = await this.toastController.create({
@@ -69,7 +31,29 @@ export class HomePage {
 
     await toast.present();
 
-    this.players.splice(index, 1);
+    this.rosterBuilderService.removePlayer(index);
+  }
+
+  async addPlayer() {
+    const toast = await this.toastController.create({
+      message: 'Adding player...',
+      duration: 1500,
+      position: 'bottom',
+      color: 'success'
+    });
+
+    this.inputDialogService.showPrompt(toast);
+  }
+
+  async editPlayer(player: any, index: number) {
+    const toast = await this.toastController.create({
+      message: 'Editing player...',
+      duration: 1500,
+      position: 'bottom',
+      color: 'success'
+    });
+
+    this.inputDialogService.showPrompt(toast, player, index);
   }
 
 }
