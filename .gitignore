@@ -9,3 +9,6 @@
 *.vsidx
 *.suo
 /rosterBuilder/.vs/VSWorkspaceState.json
+*.config
+*.lock
+*.sqlite

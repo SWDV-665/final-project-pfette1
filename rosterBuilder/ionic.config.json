@@ -1,7 +1,10 @@
 {
   "name": "rosterBuilder",
   "integrations": {
-    "capacitor": {}
+    "capacitor": {
+      "enabled": false
+    },
+    "cordova": {}
   },
   "type": "angular"
 }
