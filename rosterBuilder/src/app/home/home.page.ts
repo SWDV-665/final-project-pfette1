@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { InputDialogService } from '../../providers/input-dialog.service';
 import { RosterBuilderService } from '../../providers/roster-builder.service';
-import { SocialSharing } from '@ionic-native/social-sharing/ngx'
 
 @Component({
   selector: 'app-home',
@@ -12,18 +11,30 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx'
 export class HomePage {
 
   title = "Roster Builder";
+  players: any = [];
+  errorMessage: string = "";
 
   constructor(
     private toastController: ToastController,
     public rosterBuilderService: RosterBuilderService,
-    public inputDialogService: InputDialogService,
-    public socialSharingService: SocialSharing) { }
-
-  loadPlayers() {
-   return this.rosterBuilderService.getPlayers();
+    public inputDialogService: InputDialogService) {
+    rosterBuilderService.dataChanged$.subscribe((dataChanged: boolean) => {
+      this.loadPlayers();
+    });
   }
 
-  async removePlayer(player: any, index: number) {
+  ionViewWillEnter() {
+    this.loadPlayers();
+  }
+
+  loadPlayers() {
+    this.rosterBuilderService.getPlayers().subscribe(
+      players => this.players = players,
+      error => this.errorMessage = <any>error
+    )
+  }
+
+  async removePlayer(player: any, id: any) {
     const toast = await this.toastController.create({
       message: player.name + ' successfully removed',
       duration: 1500,
@@ -33,19 +44,7 @@ export class HomePage {
 
     await toast.present();
 
-    this.rosterBuilderService.removePlayer(index);
-  }
-
-  async textPlayer(player: any, index: number) {
-    let message = "Welcome to the Team";
-    let phoneNumber = player.phoneNumber;
-
-    this.socialSharingService.shareViaSMS(message, phoneNumber).then(() => {
-      console.log("Succesfully Shared");
-    }).catch((error) => {
-      console.error("Error while sharing", error);
-    })
-
+    this.rosterBuilderService.removePlayer(id);
   }
 
   async addPlayer() {
@@ -56,10 +55,23 @@ export class HomePage {
       color: 'success'
     });
 
-    this.inputDialogService.showPrompt(toast);
+    this.inputDialogService.showUpsertPlayerPrompt(toast);
   }
 
-  async editPlayer(player: any, index: number) {
+  async messageTeam() {
+    const toast = await this.toastController.create({
+      message: 'Sending Message...',
+      duration: 1500,
+      position: 'bottom',
+      color: 'success'
+    });
+
+    var teamPhoneNumbers = this.players.map((player: { phoneNumber: any; }) => player.phoneNumber)
+
+    this.inputDialogService.showMessageTeamPrompt(toast, teamPhoneNumbers);
+  }
+
+  async editPlayer(player: any, index: number, id: any) {
     const toast = await this.toastController.create({
       message: 'Editing player...',
       duration: 1500,
@@ -67,7 +79,7 @@ export class HomePage {
       color: 'success'
     });
 
-    this.inputDialogService.showPrompt(toast, player, index);
+    this.inputDialogService.showUpsertPlayerPrompt(toast, player, index, id);
   }
 
 }

@@ -1,43 +1,53 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { catchError, map, Observable, Subject, ObservableInput } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RosterBuilderService {
 
-  players = [
-    {
-      name: "Jackson",
-      contactName: "Patrick",
-      phoneNumber: "5025553570"
-    },
-    {
-      name: "Sammy",
-      contactName: "John",
-      phoneNumber: "5029868959"
-    },
-    {
-      name: "Levi",
-      contactName: "Eric",
-      phoneNumber: "5029868794"
-    }
-  ]
+  players: Object = [];
+  dataChanged$: Observable<boolean>;
+  private dataChangeSubject: Subject<boolean>
 
-  constructor() { }
+  baseUrl = "http://localhost:8080";
 
-  getPlayers() {
-    return this.players;
+  constructor(public http: HttpClient) {
+    this.dataChangeSubject = new Subject<boolean>();
+    this.dataChanged$ = this.dataChangeSubject.asObservable();
+  }
+
+  getPlayers(): Observable<object[]> {
+    return this.http.get(this.baseUrl + '/api/rosterBuilder').pipe(
+      map(this.extractData),
+      catchError(err => { throw err })
+    )
+  }
+
+  private extractData(res: Response | any) {
+    let body = res;
+    return body || {};
   }
 
   addPlayer(player: any) {
-    this.players.push(player);
+    this.http.post(this.baseUrl + '/api/rosterBuilder', player).subscribe(res => {
+      this.players = res;
+      this.dataChangeSubject.next(true);
+    });
   }
 
-  removePlayer(index: number) {
-    this.players.splice(index, 1);
+  removePlayer(id: any) {
+    this.http.delete(this.baseUrl + '/api/rosterBuilder/' + id).subscribe(res => {
+      this.players = res;
+      this.dataChangeSubject.next(true);
+    });
   }
 
-  editPlayer(player: any, index: number) {
-    this.players[index] = player;
+  editPlayer(player: any, index: number, id: any) {
+    this.http.put(this.baseUrl + '/api/rosterBuilder/' + id, player).subscribe(res => {
+      this.players = res;
+      this.dataChangeSubject.next(true);
+    });
   }
 }

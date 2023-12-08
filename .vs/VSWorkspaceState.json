@@ -1,0 +1,12 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\rosterBuilder",
+    "\\rosterBuilder\\src",
+    "\\rosterBuilder\\src\\app",
+    "\\rosterBuilder\\src\\app\\home",
+    "\\rosterBuilder\\src\\providers"
+  ],
+  "SelectedNode": "\\rosterBuilder\\src\\providers\\input-dialog.service.ts",
+  "PreviewInSolutionExplorer": false
+}
