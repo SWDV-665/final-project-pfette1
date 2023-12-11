@@ -66,7 +66,10 @@ export class HomePage {
       color: 'success'
     });
 
-    var teamPhoneNumbers = this.players.map((player: { phoneNumber: any; }) => player.phoneNumber)
+    //message service takes a comma delimited list of phone numbers for sharing
+    var teamPhoneNumbers = this.players.map(function (player: { phoneNumber: any; }) {
+      return player.phoneNumber;
+    }).join(', ');
 
     this.inputDialogService.showMessageTeamPrompt(toast, teamPhoneNumbers);
   }
