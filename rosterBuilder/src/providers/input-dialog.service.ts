@@ -26,11 +26,12 @@ export class InputDialogService {
         },
         {
           text: 'Save',
-          handler: (player: any) => {
+          handler: (playerHandler: any) => {
             if (index !== undefined) {
-              this.rosterBuilderService.editPlayer(player, index, id);
+              playerHandler.image = player.image;
+              this.rosterBuilderService.editPlayer(playerHandler, index, id);
             } else {
-              this.rosterBuilderService.addPlayer(player)
+              this.rosterBuilderService.addPlayer(playerHandler)
             }
             toast.present();
           }
