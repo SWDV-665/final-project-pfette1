@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { InputDialogService } from '../../providers/input-dialog.service';
 import { RosterBuilderService } from '../../providers/roster-builder.service';
+import { Camera, CameraOptions } from '@ionic-native/camera';
 
 @Component({
   selector: 'app-home',
@@ -13,6 +14,7 @@ export class HomePage {
   title = "Roster Builder";
   players: any = [];
   errorMessage: string = "";
+  defaultPlayerImage = "../assets/img/placeholder-image-person-jpg.jpg"
 
   constructor(
     private toastController: ToastController,
@@ -83,6 +85,20 @@ export class HomePage {
     });
 
     this.inputDialogService.showUpsertPlayerPrompt(toast, player, index, id);
+  }
+
+  async takePlayerPicture(player: any, index: number, id: any) {
+
+    const image = await Camera.getPicture({
+      quality: 50,
+      mediaType: 1,
+      destinationType: Camera.DestinationType.FILE_URI,
+      encodingType: Camera.EncodingType.JPEG
+    })
+
+    player.image = image.webPath;
+
+    this.rosterBuilderService.editPlayer(player, index, id)
   }
 
 }

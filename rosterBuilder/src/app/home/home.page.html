@@ -20,11 +20,17 @@
 
     <ion-item-sliding *ngFor="let player of players; let i = index">
       <ion-item>
-        <ion-label>{{player.name}}</ion-label>
+        <ion-label style="display:contents">
+          <img class="profilePicture" *ngIf="player.image == null || player.image == ''" src="{{defaultPlayerImage}}" />
+          <img class="profilePicture" *ngIf="player.image != null && player.image != ''" src="{{player.image}}" />
+          {{player.name}}
+        </ion-label>
       </ion-item>
-
       <ion-item-options>
-        <ion-item-option color="primary" (click)="editPlayer(player, i, player._id)">
+        <ion-item-option color="primary" (click)="takePlayerPicture(player, i, player._id)">
+          <ion-icon name="create"></ion-icon> Take Picture
+        </ion-item-option>
+        <ion-item-option color="tertiary" (click)="editPlayer(player, i, player._id)">
           <ion-icon name="create"></ion-icon> Edit
         </ion-item-option>
         <ion-item-option color="danger" (click)="removePlayer(player, player._id)">
@@ -32,9 +38,7 @@
         </ion-item-option>
       </ion-item-options>
     </ion-item-sliding>
-
   </ion-list>
-
   <ion-fab slot="fixed" vertical="bottom" horizontal="end">
     <ion-fab-button (click)="addPlayer()" style="margin-bottom: 10px">
       <ion-icon name="add"></ion-icon>
@@ -43,5 +47,4 @@
       <ion-icon name="chatbox-outline"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-
 </ion-content>
