@@ -26,7 +26,8 @@ app.use(function (req, res, next) {
 var Player = mongoose.model('Player', {
     name: String,
     contactName: String,
-    phoneNumber: String
+    phoneNumber: String,
+    image: String
 });
 
 
@@ -53,6 +54,7 @@ app.post('/api/rosterBuilder', function (req, res) {
         name: req.body.name,
         contactName: req.body.contactName,
         phoneNumber: req.body.phoneNumber,
+        image: req.body.image,
         done: false
     }, function (err, players) {
         if (err) {
@@ -76,7 +78,8 @@ app.put('/api/rosterBuilder/:id', function (req, res) {
     const player = {
         name: req.body.name,
         contactName: req.body.contactName,
-        phoneNumber: req.body.phoneNumber
+        phoneNumber: req.body.phoneNumber,
+        image: req.body.image
     };
 
     Player.update({ _id: req.params.id }, player, function (err, raw) {
